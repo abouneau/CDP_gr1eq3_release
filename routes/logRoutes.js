@@ -8,13 +8,9 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '..', '/views'))
 app.use(express.static(path.join(__dirname, '..', 'css')))
 
-app.get('/', function (req, res) {
-  res.render('backlog', { user: logController.userConnected })
-})
-
-app.get('/tasks', function (req, res) {
-  res.render('task', { user: logController.userConnected })
-})
+// app.get('/tasks', function (req, res) {
+//   res.render('task', { user: logController.userConnected })
+// })
 
 app.get('/signUp', function (req, res) {
   res.render('signUp', { mailError: '', user: logController.userConnected })
@@ -26,7 +22,7 @@ app.get('/signIn', function (req, res) {
 
 app.get('/signOut', function (req, res) {
   logController.userConnected = ''
-  res.render('backlog', { user: logController.userConnected })
+  res.redirect('/')
 })
 
 app.post('/signUp', function (req, res) {
