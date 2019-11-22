@@ -88,11 +88,21 @@
 
 #### Installation & lancement du serveur
 
+- docker-compose up
+
+Ou alors : 
+
 - npm install
 - node app.js
+
+Pour accéder au site, il faut ensuite lancer un navigateur et se rendre sur localhost:4321.
 
 #### Informations sur les sprints et les tâches
 
 Les issues du sprint 1 sont disponibles [ici](specs/Sprint1.md).
 
 Les tâches du sprint 1 sont disponibles [ici](specs/Task1.md).
+
+Les issues du sprint 2 sont disponibles [ici](specs/Sprint2.md).
+
+Les tâches du sprint 2 sont disponibles [ici](specs/Task2.md).
