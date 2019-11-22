@@ -31,12 +31,13 @@ function findElementInDB (element, collection, message, failMessage) {
       if (result) {
         console.log(message || `Successfully found: ${result}`)
       } else {
-        console.log(failMessage || 'Not found')
+        throw new Error('Element not found...')
       }
       return result
     })
-    .catch(err => console.error(`Failed to find: ${err}`)
-    )
+    .catch(err => {
+      throw err
+    })
 }
 
 function elementExists (element, collection) {
@@ -53,8 +54,8 @@ function elementExists (element, collection) {
  * Get all elements from a whole collection, in an array
  * @param {*} collection The collection to get
  */
-function getWholeCollection (collection) {
-  return collection.find().toArray()
+function getWholeCollection (collection, filterCriterion) {
+  return collection.find(filterCriterion).toArray()
 }
 
 /**
@@ -65,9 +66,11 @@ function getWholeCollection (collection) {
  * @param {*} message The message to show when successful
  */
 function updateElementInDB (oldElement, newElement, collection, message) {
-  collection.updateOne(oldElement, { $set: newElement }, function (err, result) {
-    if (err) console.log(err)
-    else if (result) console.log(message)
+  return collection.updateOne(oldElement, { $set: newElement }).then(result => {
+    if (result) {
+      console.log(message)
+      return result
+    }
   })
 }
 
@@ -78,9 +81,11 @@ function updateElementInDB (oldElement, newElement, collection, message) {
  * @param {*} message The essage to show when successful
  */
 function deleteElementFromDB (element, collection, message) {
-  collection.deleteOne(element, function (err, result) {
-    if (err) console.log(err)
-    else if (result) console.log(message)
+  collection.deleteOne(element).then(result => {
+    if (result) {
+      console.log(message)
+      return result
+    }
   })
 }
 
@@ -116,7 +121,8 @@ function disconnectFromDB () {
 
 const MongoClient = require('mongodb').MongoClient
 const uri = 'mongodb+srv://collabcdp2019:cdp2019@cdp2019-iaivu.gcp.mongodb.net/test?retryWrites=true&w=majority'
-const client = new MongoClient(uri, { useUnifiedTopology: true, useNewUrlParser: true })
+const url = 'mongodb://mongo:27017'
+const client = new MongoClient(url, { useUnifiedTopology: true, useNewUrlParser: true })
 connectToDB()
 
 module.exports = {

@@ -1,0 +1,21 @@
+<html>
+
+<head>
+  <title> <%= project._name %> </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <%- include('./navbar.ejs', {project: project}) %>
+  </head>
+
+<body>
+  Nom du projet : <%= project._name %><br>
+  Description : <%= project._description %><br>
+  Collaborateurs : <%= project._contributors %>
+
+  <form action="/projects/<%= project._id %>" method = "POST">
+    <input placeholder="Recherche" name="newContributor" required>
+    <button type="submit" class="btn btn-success">Ajouter un collaborateur</button>
+  </form>
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 class User {
-  /**
+/**
    * Constructs a new user
    * @param {*} mail The mail to link with that user
    * @param {*} password The password to link with that user
@@ -10,7 +10,9 @@ class User {
     if (username) {
       this._name = username
     }
-    this._password = password
+    if (password) {
+      this._password = password
+    }
   }
 }
 

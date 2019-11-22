@@ -1,0 +1,18 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - "4320:4320"
+    volumes:
+      - ./database
+  app:
+    build: .
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./controllers
+      - ./models
+      - ./views
+    depends_on:
+      - mongo

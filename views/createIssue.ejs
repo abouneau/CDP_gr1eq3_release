@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title> Nouvelle issue </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <%- include('./navbar.ejs', {project: project})%>
+</head>
+
+<body>
+    <form action="/projects/<%= project._id %>/issues/create" method="POST">
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" placeholder="ID" class="form-control" name="id" id="idInput" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Nom</label>
+            <input type="text" placeholder="Nom" class="form-control" name="name" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" class="form-control" id="description" placeholder="Description de l'issue">En tant que ..., Je Peux ..., Afin de ...</textarea>
+        </div>
+        <div class="form-group">
+            <label for="priority">Priorité</label>
+            <input type="number" placeholder="Priorité" class="form-control" name="priority" id="priority" required>
+        </div>
+        <div class="form-group">
+            <label for="difficulty">Difficulté</label>
+            <input type="number" placeholder="Difficulté" class="form-control" name="difficulty" id="difficulty" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        <a type="button" class="btn btn-secondary" href="/projects/<%= project._id %>/issues">Annuler</a>
+    </form>
+
+
+</body>
+
+</html>

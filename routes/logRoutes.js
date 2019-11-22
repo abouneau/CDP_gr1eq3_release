@@ -1,40 +1,65 @@
 const express = require('express')
-const app = express()
-const path = require('path')
+const router = express()
 const logController = require('../controllers/logController')
+const path = require('path')
+const User = require('../models/logModel')
 
-// set the view engine to ejs
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, '..', '/views'))
-app.use(express.static(path.join(__dirname, '..', 'css')))
+router.set('view engine', 'ejs')
+router.set('views', path.join(__dirname, '..', '/views'))
+router.use(express.static(path.join(__dirname, '..', 'css')))
 
-// app.get('/tasks', function (req, res) {
-//   res.render('task', { user: logController.userConnected })
-// })
-
-app.get('/signUp', function (req, res) {
-  res.render('signUp', { mailError: '', user: logController.userConnected })
+router.get('/', function (req, res) {
+  res.redirect('/signIn')
 })
 
-app.get('/signIn', function (req, res) {
-  res.render('signIn', { invalidMail: '', user: logController.userConnected })
+router.get('/signIn', function (req, res) {
+  res.render('signIn')
 })
 
-app.get('/signOut', function (req, res) {
-  logController.userConnected = ''
+router.get('/signUp', function (req, res) {
+  res.render('signUp')
+})
+
+router.get('/signOut', function (req, res) {
+  req.session.user = undefined
   res.redirect('/')
 })
 
-app.post('/signUp', function (req, res) {
-  logController.createAccount(req, res)
+router.get('/profile', function (req, res) {
+  res.render('profile')
 })
 
-app.post('/signIn', function (req, res) {
-  logController.findAccount(req, res)
+router.post('/signIn', function (req, res) {
+  logController.authenticate(req, res).then(result => {
+    console.log('User = ' + JSON.stringify(result))
+    if (result) {
+      req.session.user = new User(result._id, result._password, result._name)
+      res.redirect('/projects')
+    } else {
+      res.redirect('/signIn')
+    }
+  })
 })
 
-/* app.listen(3001, function () {
-  console.log('App listening on port 3001!')
-}) */
+router.post('/signUp', function (req, res) {
+  logController.createAccount(req, res).then(result => {
+    const user = result.ops[0]
+    req.session.user = new User(user._id, user._password, user._name)
+    res.redirect('/projects')
+  })
+})
 
-module.exports = app
+router.post('/profile', function (req, res) {
+  logController.changeUsernameOrPassword(req, res).then(result => {
+    req.session.user = new User(result._id, result._password, result._name)
+    res.redirect('/projects')
+  })
+})
+
+router.get('/deleteAccount', function (req, res) {
+  logController.deleteAccount(req, res)
+  req.session.user = undefined
+  res.redirect('/')
+})
+
+module.exports = router

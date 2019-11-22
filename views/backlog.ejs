@@ -1,39 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <%include ./navbar.ejs%>
-  <title>Backlog</title>
+    <meta charset="UTF-8">
+    <title> Backlog </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <%- include('./navbar.ejs', {project: project}) %>
+    <script>
+      function showDetail(id, b) {
+        document.getElementById(id).style.display = b ? '' : 'none'
+      }
+    </script>
 </head>
-<body class="container">
 
-<div class="jumbotron">
-    <h1>Issues</h1>
-    <p>Voici la liste des issues</p>
-</div>
-
-<a href="/addIssue" class="btn btn-success btn-lg">Créer une nouvelle issue</a>
-
-<ul class="list-unstyled"></ul>
-<% issues.forEach(function(issue) { %>
-    <li class="media my-4">
+<body>
+    <div class="container">
         
-          
-          <div class="media-body">
-              <h5 class="mt-0 mb-1"><%= issue._id %></h5>
-              <%= issue._name%>
-              <%= issue._priority %>
-          </div> 
-          <form action="/deleteIssue" method="post">
-            <input type="text" name="id" class="form-control" id="id" value="<%= issue._id %>" hidden>
-            <button type="submit" class="btn btn-danger">Supprimer</button>
-          </form>  
-          <a href="/updateIssue?id=<%=issue._id%>" class="btn btn-primary">Modifier</a>  
-          
-    </li>
-<% }); %>
-</ul>
+        <h2> Backlog </h2>
+        <a href="/projects/<%= project._id %>/issues/create" class="btn btn-success"> Nouvelle issue </a>
+        <% for( let issue of issues ){ %>
+        <li class="media my-4">
+            <div class="media-body <%=issue._color%>" role="alert" onmouseover="showDetail('<%=issue._id%>', true);" onmouseout="showDetail('<%=issue._id%>', false);">
+              <h5>ID : <%=issue._id%></h5>
+              Nom : <%=issue._name%> Priorité : <%=issue._priority%>
+            </div>
 
+            <form action="/projects/<%= project._id %>/tasks/<%= issue._id %>/linkTask" method="POST"> 
+              <select name="taskList" id="taskList" size="1" selected="default">
+                <option value="default"> Tâche à liée </option>
+                <% for( let task of tasks ){ %>
+                  <option value=<%=task._id%>> <%=task._id%> </option>
+                <% } %>
+              </select>
+              <button type="submit" class="btn btn-success">Liée la tâche</button>
+            </form>
 
+            <a href="/projects/<%= project._id %>/tasks/<%= issue._id %>/tiedTask" class = "btn btn-success"> Créer une tâche liée</a>
+
+            <a href="/projects/<%= project._id %>/issues/<%= issue._id %>/update" class = "btn btn-primary"> Modifier</a>
+
+            <form action="/projects/<%= project._id %>/issues/<%= issue._id %>/delete" method="POST">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+        </li>
+        <div id="<%= issue._id %>" style="display:none;">
+          <p>Description : <%=issue._description%></p>
+          <p>Difficulté : <%=issue._difficulty%></p>
+        </div>
+        <% } %>
+    </div>
 </body>
+
 </html>
