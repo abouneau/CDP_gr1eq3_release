@@ -1,3 +1,8 @@
+/**
+ * Module containing all methods relative to releases
+ * @module releaseController
+ */
+
 const Release = require('../models/releaseModel')
 const dbconnect = require('../database/dbconnect')
 const ObjectID = require('mongodb').ObjectID
@@ -11,7 +16,7 @@ const releasedIssueCollectionName = 'ReleasedIssues'
 /**
  * Return an array containing all the releases of a project
  * @param {String} projectID The project ID of releases returned
- * @returns {Array[Object]} Array containing all the releases of the project
+ * @returns {Array[]} Array containing all the releases of the project
  */
 exports.getAllReleases = function (projectID) {
   const collection = dbconnect.client.db(databaseName).collection(collectionName)
@@ -49,7 +54,7 @@ exports.getRelease = function (releaseID) {
 /**
  * Return an array of the issues contain in this release
  * @param {String} releaseID the ID of the release to return an array of issues contain in
- * @returns {Array[Object]} Array of the issues contain in this release
+ * @returns {Array[]} Array of the issues contain in this release
  */
 exports.getIssueListOfRelease = function (releaseID) {
   return this.getRelease(releaseID).then(release => {
@@ -84,8 +89,8 @@ exports.addToReleasedIssue = function (issue) {
 
 /**
  * Erase all the task linked only to issues contained in this released or precedent released
- * @param {Array[Object]} issues the issues released
- * @param {Array{Object}} tasks all the tasks of the project
+ * @param {Array[]} issues the issues released
+ * @param {Array[]} tasks all the tasks of the project
  */
 exports.updateTask = function (issues, tasks) {
   for (const task of tasks) {

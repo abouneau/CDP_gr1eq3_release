@@ -1,3 +1,8 @@
+/**
+ * Module containing all methods relative to tests
+ * @module testController
+ */
+
 const Test = require('../models/testModel')
 const dbconnect = require('../database/dbconnect')
 const ObjectID = require('mongodb').ObjectID
@@ -8,7 +13,7 @@ const collectionName = 'Tests'
 /**
  * Return an array containing all the tests of a project
  * @param {String} projectID The project ID of tests returned
- * @returns {Array[Object]} Array containing all the tests of the project
+ * @returns {Array[]} Array containing all the tests of the project
  */
 exports.getAllTests = function (projectID) {
   // check if projectID is a valid argument for ObjectID()

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/testController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/testController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Module containing all methods relative to tests
+ * @module testController
+ */
+
+const Test = require('../models/testModel')
+const dbconnect = require('../database/dbconnect')
+const ObjectID = require('mongodb').ObjectID
+
+const databaseName = 'Projets'
+const collectionName = 'Tests'
+
+/**
+ * Return an array containing all the tests of a project
+ * @param {String} projectID The project ID of tests returned
+ * @returns {Array[]} Array containing all the tests of the project
+ */
+exports.getAllTests = function (projectID) {
+  // check if projectID is a valid argument for ObjectID()
+  try {
+    ObjectID(projectID)
+  } catch (err) {
+    return new Promise((resolve, reject) => {
+      reject(err)
+    })
+  }
+
+  const collection = dbconnect.client.db(databaseName).collection(collectionName)
+
+  return dbconnect.getWholeCollection(collection, { _projectID: projectID })
+    .then(tests => {
+      return tests
+    })
+    .catch(err => {
+      throw err
+    })
+}
+
+/**
+ * Return a test
+ * @param {String} issueID The ID of the test to return
+ * @returns {Object} test of the project with testID asked
+ */
+exports.getTest = function (testID) {
+  // check if testID is a valid argument for ObjectID()
+  try {
+    ObjectID(testID)
+  } catch (err) {
+    return new Promise((resolve, reject) => {
+      reject(err)
+    })
+  }
+  const collection = dbconnect.client.db(databaseName).collection(collectionName)
+
+  return dbconnect.findElementInDB({ _id: ObjectID(testID) }, collection)
+    .then(test => {
+      return test
+    })
+    .catch(err => {
+      throw err
+    })
+}
+
+/**
+ * Create a new test given a projectID, name and description
+ * @param {object} req - the request containing the projectID, name and description of the test we want to create
+ * @param {object} res - the response where the new app state will be stored
+ * @return {promise} The promise that the test will be created if possible, then the created test
+ */
+exports.createTest = function (req, res) {
+  const test = new Test(
+    req.params.projectID,
+    req.body.name,
+    req.body.description
+  )
+  const collection = dbconnect.client.db(databaseName).collection(collectionName)
+  return dbconnect.addElementToDB(test, collection, 'Test added successfully.')
+}
+
+/**
+ * Update an existing test given projectID, name and description
+ * @param {object} req - the request containing the projectID, name and description of the test we want to update
+ * @param {object} res - the response where the new app state will be stored
+ * @return {promise} The promise that the test will be updated if possible, then the updated test
+ */
+exports.updateTest = function (req, res) {
+  const testToUpdate = { _id: ObjectID(req.params.id) }
+  const updatedTest = {
+    _projectID: req.params.projectID,
+    _name: req.body.name,
+    _description: req.body.description
+  }
+  const collection = dbconnect.client.db(databaseName).collection(collectionName)
+  return dbconnect.updateElementInDB(testToUpdate, updatedTest, collection, 'Test updated')
+}
+
+/**
+ * Delete an existing test given an testID
+ * @param {object} req - the request containing the ID of the test we want to delete
+ * @param {object} res - the response where the new app state will be stored
+ */
+exports.deleteTest = function (req, res) {
+  const testToDelete = { _id: ObjectID(req.params.id) }
+  const collection = dbconnect.client.db(databaseName).collection(collectionName)
+
+  dbconnect.deleteElementFromDB(testToDelete, collection, 'Test deleted')
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-issueController.html">issueController</a></li><li><a href="module-logController.html">logController</a></li><li><a href="module-releaseController.html">releaseController</a></li><li><a href="module-sprintController.html">sprintController</a></li><li><a href="module-taskController.html">taskController</a></li><li><a href="module-testController.html">testController</a></li></ul><h3>Classes</h3><ul><li><a href="Issue.html">Issue</a></li><li><a href="Release.html">Release</a></li><li><a href="Sprint.html">Sprint</a></li><li><a href="Task.html">Task</a></li><li><a href="Test.html">Test</a></li><li><a href="User.html">User</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Dec 10 2019 16:22:49 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

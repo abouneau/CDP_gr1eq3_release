@@ -1,3 +1,8 @@
+/**
+ * Module containing all methods relative to issues
+ * @module issueController
+ */
+
 const Issue = require('../models/issueModel')
 const dbconnect = require('../database/dbconnect')
 const taskController = require('../controllers/taskController')
@@ -9,7 +14,7 @@ const collectionName = 'Issues'
 /**
  * Return an array containing all the issues of a project
  * @param {String} projectID The project ID of issues returned
- * @returns {Array[Object]} Array containing all the issues of the project
+ * @returns {Array[]} Array containing all the issues of the project
  */
 exports.getAllIssues = function (projectID) {
   const collection = dbconnect.client.db(databaseName).collection(collectionName)
@@ -23,8 +28,8 @@ exports.getAllIssues = function (projectID) {
 
 /**
  * Update all issues state of a project based on the state of the task linked
- * @param {Array[Object]} issues The issues to update
- * @param {Array[Object]} tasks The tasks linked
+ * @param {Array[]} issues The issues to update
+ * @param {Array[]} tasks The tasks linked
  * @param {ObjectID} projectID In case there are no parameter issues or tasks gived, it allows to recover issues and tasks
  */
 exports.updateAllIssue = function (issues, tasks, projectID) {
@@ -107,7 +112,7 @@ exports.getIssue = function (issueID) {
 /**
  * Return an array of the tasks linked to this issue
  * @param {String} issueID the ID of the issue to return an array of tasks linked to
- * @returns {Array[Object]} Array of the tasks linked to the issue
+ * @returns {Array[]} Array of the tasks linked to the issue
  */
 exports.getTaskLinked = function (issueID) {
   return this.getIssue(issueID)
@@ -131,7 +136,10 @@ exports.getTaskLinked = function (issueID) {
  * If the issueID is already in use for an issue, then an error is thrown,
  * and the issue will not be created.
  * @param {object} req - the request containing the issueID, projectID, description, priotity and difficulty of the issue we want to create
- * @param {object} res - the response where the new app state will be stored
+ * @param {object} res - the response where the new app state wi        }
+        for (const issue of rel._releasedUserStories) {
+          issueAlreadyReleased.push(issue)
+        }ll be stored
  * @return {promise} The promise that the issue will be created if possible, then the created issue
  */
 exports.createIssue = function (req, res) {
@@ -206,6 +214,12 @@ exports.updateIssue = function (req, res) {
     })
 }
 
+/**
+ * Return the mongoDB ID of an issue given an issueID
+ * @param {String} issueID The issueID of the issue we want the mongoDB ID
+ * @param {String} projectID The project ID of issueID
+ * @returns {ObjectID} The mongoDb ID of the issue with issueID
+ */
 exports.issueIDtoMongoID = function (issueID, projectID) {
   const collection = dbconnect.client.db(databaseName).collection(collectionName)
   return dbconnect.findElementInDB({ _issueID: issueID, _projectID: projectID }, collection).then(issue => {
@@ -215,6 +229,12 @@ exports.issueIDtoMongoID = function (issueID, projectID) {
   })
 }
 
+/**
+ * Return the issueID of an issue given a mongoDB ID
+ * @param {String} id The mongoDB ID of the issue we want the issueID
+ * @param {String} projectID The project ID of issue with  mongoDB ID id
+ * @returns {ObjectID} The issueID of the issue with  mongoDB ID id
+ */
 exports.mongoIDtoIssueID = function (id) {
   const collection = dbconnect.client.db(databaseName).collection(collectionName)
   return dbconnect.findElementInDB({ _id: ObjectID(id) }, collection).then(issue => {

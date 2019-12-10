@@ -1,3 +1,8 @@
+/**
+ * Module containing all methods relative to tasks
+ * @module taskController
+ */
+
 const Task = require('../models/taskModel')
 const dbconnect = require('../database/dbconnect')
 const ObjectID = require('mongodb').ObjectID
@@ -154,7 +159,7 @@ exports.deleteTaskByID = function (taskID) {
 /**
  * Return an array containing all the tasks of a project
  * @param {String} projectID The project ID of tasks returned
- * @returns {Array[Object]} Array containing all the tasks of the project
+ * @returns {Array[]} Array containing all the tasks of the project
  */
 exports.getAllTasks = function (projectID) {
   const collection = dbconnect.client.db(databaseName).collection(collectionName)
@@ -167,7 +172,7 @@ exports.getAllTasks = function (projectID) {
 
 /**
  * Update all task linkedUserStories of a project based on the existing issues
- * @param {Array[Object]} tasks The tasks to update
+ * @param {Array[]} tasks The tasks to update
  * @param {ObjectID} projectID In case there are no parameter tasks gived, it allows to recover tasks
  */
 exports.updateAllTask = function (tasks, projectID) {

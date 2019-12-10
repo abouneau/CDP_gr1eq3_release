@@ -1,3 +1,8 @@
+/**
+ * Module containing all methods relative to sprints
+ * @module sprintController
+ */
+
 const Sprint = require('../models/sprintModel')
 const dbconnect = require('../database/dbconnect')
 const issueController = require('./issueController')
@@ -9,7 +14,7 @@ const issueCollectionName = 'Issues'
 
 /**
  * Return a boolean that are at true if the date given in parameter is previous to today
- * @param {Array[Int]} dateToCompare The date we want to know if it's previous to today
+ * @param {Array[]} dateToCompare The date we want to know if it's previous to today
  * @returns {Boolean} A boolean indicating if dateToCompare is previous to today
  */
 const dateBeforeOrIsToday = function (dateToCompare) {
@@ -25,7 +30,7 @@ const dateBeforeOrIsToday = function (dateToCompare) {
 /**
  * Return an array containing all the sprints of a project
  * @param {String} projectID The project ID of sprints returned
- * @returns {Array[Object]} Array containing all the sprints of the project
+ * @returns {Array[]} Array containing all the sprints of the project
  */
 exports.getAllSprints = function (projectID) {
   const collection = dbconnect.client.db(databaseName).collection(collectionName)
@@ -39,7 +44,7 @@ exports.getAllSprints = function (projectID) {
 
 /**
  * Update all sprint linkedUserStories of a project based on the existing issues
- * @param {Array[Object]} sprints The sprints to update
+ * @param {Array[]} sprints The sprints to update
  * @param {ObjectID} projectID In case there are no parameter sprints given, it allows to recover sprints
  */
 exports.updateAllSprintLinkedIssue = function (sprints, projectID) {
@@ -92,7 +97,7 @@ exports.updateAllSprintLinkedIssue = function (sprints, projectID) {
 
 /**
  * Update all sprints state of a project based on beginDate and endDate of the sprints (today before beginDate: toDo) (today between beginDate and endDate or equal to one of them: onGoing) (today after endDate: end)
- * @param {Array[Object]} issues The sprints to update
+ * @param {Array[]} issues The sprints to update
  * @param {ObjectID} projectID In case there are no parameter sprints given, it allows to recover sprints
  */
 exports.updateAllSprintState = function (sprints, projectID) {
@@ -161,7 +166,7 @@ exports.getSprint = function (sprintID) {
 /**
  * Return an array of the issues linked to this sprint
  * @param {String} sprintID the ID of the sprint to return an array of issues linked to
- * @returns {Array[Object]} Array of the issues linked to the sprint
+ * @returns {Array[]} Array of the issues linked to the sprint
  */
 exports.getIssueListOfSprint = function (sprintID) {
   return this.getSprint(sprintID).then(sprint => {

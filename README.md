@@ -103,9 +103,9 @@ Voir le fichier [docAdmin.md](docAdmin.md)
 
 Voir le fichier [docUser.md](docUser.md)
 
-### Documentation du code 
+### Documentation du code
 
-Voir le dossier out
+Voir le fichier index.html dans le dossier out
 
 ### Informations sur les sprints et les tâches
 
