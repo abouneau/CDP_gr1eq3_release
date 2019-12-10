@@ -62,7 +62,6 @@ router.get(baseURL + '/tests/:id/update', function (req, res) {
     .then(test => {
       projectController.getProject(req.params.projectID)
         .then(project => {
-          console.log(project._name)
           res.render('../views/updateTest', {
             test: test,
             project: project
@@ -75,12 +74,16 @@ router.get(baseURL + '/tests/:id/update', function (req, res) {
 
 router.post(baseURL + '/tests/create', function (req, res) {
   testController.createTest(req, res)
-  res.redirect('/projects/' + req.params.projectID + '/tests')
+    .then(result => {
+      res.redirect('/projects/' + req.params.projectID + '/tests')
+    })
 })
 
 router.post(baseURL + '/tests/:id/update', function (req, res) {
   testController.updateTest(req, res)
-  res.redirect('/projects/' + req.params.projectID + '/tests')
+    .then(result => {
+      res.redirect('/projects/' + req.params.projectID + '/tests')
+    })
 })
 
 router.post(baseURL + '/tests/:id/delete', function (req, res) {

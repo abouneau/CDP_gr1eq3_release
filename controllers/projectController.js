@@ -10,6 +10,15 @@ exports.createProject = function (req, res) {
   dbconnect.addElementToDB(project, collection)
 }
 
+exports.deleteProject = function (projectID) {
+  const collection = dbconnect.client.db('Projets').collection('Projets')
+  dbconnect.deleteElementFromDB({ _id: ObjectID(projectID) }, collection, 'Project deleted')
+    .then(result => { return result })
+    .catch(err => {
+      console.error(err)
+    })
+}
+
 exports.getProject = function (projectID) {
   // check if projectID is a valid argument for ObjectID()
   try {
@@ -38,11 +47,11 @@ exports.getAllProjects = function (userID) {
     })
 }
 
-exports.addTaskToProject = function (projectID, taskID) {
-  const collection = dbconnect.client.db('Projets').collection('Projets')
-  const project = dbconnect.findElementInDB({ _id: ObjectID(projectID) }, collection)
-  project._issues.push(taskID)
-}
+// exports.addTaskToProject = function (projectID, taskID) {
+//   const collection = dbconnect.client.db('Projets').collection('Projets')
+//   const project = dbconnect.findElementInDB({ _id: ObjectID(projectID) }, collection)
+//   project._tasks.push(taskID)
+// }
 
 exports.addContributorToProject = function (projectID, newContributor) {
   const collection = dbconnect.client.db('Projets').collection('Projets')
